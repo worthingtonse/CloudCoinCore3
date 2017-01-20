@@ -34,14 +34,14 @@ public class Frack_Fixer
         for(int j = 0; j < frackedFileNames.length; j++){
             try{
                 //System.out.println("Construct Coin: "+rootFolder + suspectFileNames[j]);
-                newCC = new CloudCoin( fileUtils.frackedFolder + frackedFileNames[j]);
+                newCC = fileUtils.cloudCoinFromFile( fileUtils.frackedFolder + frackedFileNames[j]);
                 System.out.println("UnFracking SN #"+ newCC.sn +", Denomination: "+ newCC.getDenomination() );
                 CloudCoin fixedCC =  raida.fixCoin( newCC );//Will attempt to unfrack the coin. 
                 fixedCC.consoleReport();
                 switch( fixedCC.extension ){
-                    case "bank": totalValueToBank++; fixedCC.writeTo( fileUtils.bankFolder ); break;
-                    case "fractured": totalValueToFractured++; fixedCC.writeTo( fileUtils.frackedFolder ); break;//fracked still ads value to the bank
-                    case "counterfeit": totalValueToCounterfeit++; fixedCC.writeTo( fileUtils.counterfeitFolder ); break;
+                    case "bank": totalValueToBank++; fileUtils.writeTo( fileUtils.bankFolder, fixedCC ); break;
+                    case "fractured": totalValueToFractured++; fileUtils.writeTo( fileUtils.frackedFolder, fixedCC  ); break;//fracked still ads value to the bank
+                    case "counterfeit": totalValueToCounterfeit++; fileUtils.writeTo( fileUtils.counterfeitFolder, fixedCC  ); break;
                 }//end switch on the place the coin will go 
                 deleteCoin( fileUtils.frackedFolder + frackedFileNames[j] );
             }catch(FileNotFoundException ex){

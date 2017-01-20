@@ -42,107 +42,62 @@ public class Exporter
         String[] frackedFileNames = fileUtils.selectFileNamesInFolder( fileUtils.frackedFolder );//list all file names with bank extension
         bankedFileNames = fileUtils.concatArrays( bankedFileNames, frackedFileNames);//Add the two arrays together
 
-        String r = fileUtils.templateFolder;
-        String t = tag;
-        String p = fileUtils.exportFolder;
+        String path = fileUtils.exportFolder;
         /* SET JPEG, WRITE JPEG and DELETE CLOUDCOINS*/
         int c = 0;//c= counter
         String d =""; //Denomination
         CloudCoin jpgCoin = null;
-        //Put all the JSON together and add header and footer
+        byte[] jpeg;
+        //Look at all the money files and choose the ones that are needed.
         for(int i =0; i< bankedFileNames.length; i++ ){
-            String bname = fileUtils.bankFolder + bankedFileNames[i];
-            String fname = fileUtils.frackedFolder + bankedFileNames[i];
-            System.out.println("Reading from "+ bname);
-            d = bankedFileNames[i].split("\\.")[0];//Get's denominiation
+            String bankFileName = fileUtils.bankFolder + bankedFileNames[i];
+            String frackedFileName = fileUtils.frackedFolder + bankedFileNames[i];
+            System.out.println("Reading from "+ bankFileName);
+            String denomination = bankedFileNames[i].split("\\.")[0];//Get's denominiation
             try{
-
-                if( d.equals("1") && m1 > 0 ){ 
-
-                    if( fileUtils.ifFileExists( bname )){//Is it a bank file or fracked file
-                        jpgCoin = new CloudCoin( bname );
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                            fileUtils.deleteCoin( bname); 
-                        } m1--;
-                    }else{
-                        jpgCoin = new CloudCoin( fname );   
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                            fileUtils.deleteCoin( fname ); 
-                        } m1--;
-                    }
-                }//end if coin is a 1
-
-                if( d.equals("5") && m5 > 0 ){ 
-                    if(  fileUtils.ifFileExists( bname )){//Is it a bank file or fracked file
-                        jpgCoin = new CloudCoin( bname );
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                            fileUtils.deleteCoin( bname); 
-                        } m5--;
-                    }else{
-                        jpgCoin = new CloudCoin( fname );   
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                            fileUtils.deleteCoin( fname ); 
-                        } m5--;
-                    }
-                }//end if coin is a 5
-                if( d.equals("25") && m25 > 0 ){ 
-                    if( fileUtils.ifFileExists( bname )){//Is it a bank file or fracked file
-                        jpgCoin = new CloudCoin( bname );
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                            fileUtils.deleteCoin( bname); 
-                        } m25--;
-                    }else{
-                        jpgCoin = new CloudCoin( fname );   
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                            fileUtils.deleteCoin( fname ); 
-                        } m25--;
-                    }    
-                }//end if coin is a 25
-                if( d.equals("100") && m100 > 0 ){ 
-                    if( fileUtils.ifFileExists( bname )){//Is it a bank file or fracked file
-                        jpgCoin = new CloudCoin( bname );
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                           fileUtils.deleteCoin( bname); 
-                        } m100--;
-                    }else{
-                        jpgCoin = new CloudCoin( fname );   
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                            fileUtils.deleteCoin( fname ); 
-                        } m100--;
-                    }
-                }//end if coin is a 100
-                if( d.equals("250") && m250 > 0 ){ 
-                    if( fileUtils.ifFileExists( bname )){//Is it a bank file or fracked file
-                        jpgCoin = new CloudCoin( bname );
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                            fileUtils.deleteCoin( bname); 
-                        } m250--;
-                    }else{
-                        jpgCoin = new CloudCoin( fname );   
-                        jpgCoin.setJpeg(r); 
-                        if( jpgCoin.writeJpeg(p,t)){ 
-                            fileUtils.deleteCoin( fname ); 
-                        } m250--;
-                    }
-                }//end if coin is a 250
+                if( denomination.equals("1") && m1 > 0 ){ 
+                     jpegWriteOne( path, tag, bankFileName, frackedFileName);
+                     m1--;
+                }else if( denomination.equals("5") && m5 > 0 ){ 
+                    jpegWriteOne(  path, tag,  bankFileName, frackedFileName);
+                     m5--;
+                }else if( denomination.equals("25") && m25 > 0 ){ 
+                   jpegWriteOne(   path, tag, bankFileName, frackedFileName);
+                     m25--;
+                }else if( denomination.equals("100") && m100 > 0 ){ 
+                    jpegWriteOne(  path, tag,  bankFileName, frackedFileName);
+                     m100--;
+                }else if( denomination.equals("250") && m250 > 0 ){ 
+                    jpegWriteOne(  path, tag,  bankFileName, frackedFileName);
+                     m250--;
+                }else {/*skip it because it is not needed*/}//end if file is needed for stack
+                
                 if( m1 ==0 && m5 ==0 && m25 == 0 && m100 == 0 && m250 == 0 ){break;}//Break if all the coins have been called for.     
-
+            
             }catch(FileNotFoundException ex){
             }catch(IOException ioex){ }
         }//for each 1 note  
     }//end export
 
+    public void jpegWriteOne( String path, String tag, String bankFileName, String frackedFileName) throws IOException, FileNotFoundException{
+                    if( fileUtils.ifFileExists( bankFileName )){//Is it a bank file or fracked file
+                        CloudCoin jpgCoin = fileUtils.cloudCoinFromFile( bankFileName );
+                        byte[] jpeg = fileUtils.makeJpeg( jpgCoin); 
+                        if( fileUtils.writeJpeg(path, tag, jpeg, jpgCoin.fileName )){ 
+                            fileUtils.deleteCoin( bankFileName); 
+                        } 
+                    }else{
+                        CloudCoin jpgCoin = fileUtils.cloudCoinFromFile( frackedFileName );   
+                        byte[] jpeg = fileUtils.makeJpeg( jpgCoin); 
+                        if( fileUtils.writeJpeg(path, tag, jpeg, jpgCoin.fileName )){ 
+                            fileUtils.deleteCoin( frackedFileName ); 
+                        }
+                    }
+    }//end jpeg prep
+    
+    
     /**
-     * Method exportJpeg Exports a JSON file with a .stack exension with a lot of CloudCoins in it. 
+     * Method writeJSONFile Exports a JSON file with a .stack exension with a lot of CloudCoins in it. 
      *
      * @param m1 How many json to create of the 1s denomination. 
      * @param m5 How many json to create of the 5s denomination. 

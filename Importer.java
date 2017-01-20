@@ -68,8 +68,8 @@ public class Importer
     {
         boolean isSuccessful = false;// System.out.println("Trying to load: " + importFolder + fileName );
         try{
-            CloudCoin tempCoin = new CloudCoin( fileUtils.importFolder + fileName );
-            tempCoin.writeTo( fileUtils.suspectFolder );
+            CloudCoin tempCoin = fileUtils.cloudCoinFromFile( fileUtils.importFolder + fileName );
+            fileUtils.writeTo( fileUtils.suspectFolder, tempCoin );
             //System.out.println("File saved to " + importFolder + fileName);
             fileUtils.moveToImportedFolder( fileName );
             return true;
@@ -108,7 +108,7 @@ public class Importer
                 String ed     = childJSONObject.getString("ed");//JSONArray aoid = childJSONObject.getJSONArray("aoid"); // String[] aoids = toStringArray(aoid) DO NOT IMPORT ANY AOID INFO
                 Dictionary aoid = null;//Wipe any old owner notes //this.newCoins[i] = new CloudCoin( nn, sn, toStringArray(an), ed, aoid, security );//This could cause memory issues.   
                 tempCoin = new CloudCoin( nn, sn, ans, ed, aoid, "suspect" );//security should be change or keep for pans. //tempCoin.consoleReport();
-                tempCoin.writeTo( fileUtils.suspectFolder  );//Put in bank folder with suspect extension
+                fileUtils.writeTo( fileUtils.suspectFolder, tempCoin  );//Put in bank folder with suspect extension
                 fileUtils.moveToImportedFolder( fileName );
             }//end for each coin
             isSuccessful = true;

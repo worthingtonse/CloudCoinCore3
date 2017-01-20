@@ -102,12 +102,15 @@ public class CloudCoin
         }//end for each pan
     }
 
+    public CloudCoin( )//Default constructor
+    {
+    }
     /**
      * CloudCoin Constructor
      *
      * @param loadFilePath Loads files internally so they can be moved around. 
      * Throws file not found exception or ioexception
-     */
+     
     public CloudCoin( String loadFilePath ) throws FileNotFoundException, IOException { //If loading from inside
         //put some default values
         for(int i = 0; i< 25; i++){
@@ -115,7 +118,7 @@ public class CloudCoin
             pastStatus[i] = "undetected";
         }//end for each pan
         
-        /*SEE IF FILE IS JPEG OR JSON*/
+        //*SEE IF FILE IS JPEG OR JSON
         int indx = loadFilePath.lastIndexOf('.');
         if (indx > 0) {
             extension = loadFilePath.substring(indx+1);
@@ -169,7 +172,7 @@ public class CloudCoin
                 }//end for each coin
            // }catch( JSONException ex){
               //  System.out.println("Error Loading CloudCoin from JSON : " + ex);
-            //}//try */
+            //}//try 
             
         }//end if json
         
@@ -177,7 +180,7 @@ public class CloudCoin
         this.json = "";
         this.jpeg = null;
     }//end new cc based on file content
-
+*/
     /**
      * Returns the denomination of the money based on the serial number
      * 
@@ -201,7 +204,7 @@ public class CloudCoin
      * Method setJSON creates JSON text version of the coin that can be written to file.
      *
      * @return The return value is a String of JSON that can be written to hard drive. 
-     */
+     
     public String setJSON(){   
        
         json =  "\t\t{" + System.getProperty("line.separator") ;
@@ -264,7 +267,7 @@ public class CloudCoin
      * Method setJpeg creates an array of bytes that can be written to file to make a jpg image based on the CloudCoin
      *
      * @param rootFolder This points to the template that will be used to make the jpg image. Templates can be customized.
-     */
+    
     public void setJpeg( String templateFolder){
         byte[] returnBytes =  null;
         //Make byte array from CloudCoin
@@ -321,7 +324,7 @@ public class CloudCoin
             }//end catch
             break;
         }//end switch
-        /*OVERWRITE */
+        /*OVERWRITE 
         byte[] ccArray = hexStringToByteArray( cloudCoinStr );
         int offset = 20;  // System.out.println("ccArray length " + ccArray.length);
         for( int j =0; j < ccArray.length; j++  ){
@@ -329,13 +332,13 @@ public class CloudCoin
         }//end for each byte in the ccArray
         this.jpeg = returnBytes;
     }//end get jpeg
-
+*/
     /**
      * Method toHexadecimal
      *
      * @param digest An array of bytes that will change into a string of hex characters
      * @return A string version of the bytes in hex form. 
-     */
+    
     private String toHexadecimal(byte[] digest){
         String hash = "";
         for(byte aux : digest) {
@@ -345,6 +348,7 @@ public class CloudCoin
         }
         return hash;
     }
+ */
 
     /**
      * Mutator method. Goes through all the pastStatuses and counts the fails. 
@@ -368,7 +372,7 @@ public class CloudCoin
      * @param path The full path to the file except the file name.
      * @param tag A parameter that adds a tag to the filename
      * @return true if file is saved, false if file is not saved
-     */
+     
     public boolean writeJpeg( String path, String tag ){  
         boolean writeGood = true;
         String file = path + File.separator  + this.fileName + tag +".jpg";
@@ -381,7 +385,7 @@ public class CloudCoin
         }//end try ioexception
         return writeGood;
     }//end jpeg to file
-
+*/
     /**
      * Creates some string comments for the user to understand the coin status. 
      *
@@ -507,20 +511,20 @@ public class CloudCoin
      * @param substr The part of the string to count the nth occrance
      * @param n The number of occurances we want to find. Starts at 1 not zero!
      * @return The return value
-     */
+    
     private int ordinalIndexOf(String str, String substr, int n) {
         int pos = str.indexOf(substr);
         while (--n > 0 && pos != -1)
             pos = str.indexOf(substr, pos + 1);
         return pos;
     }
-
+ */
     /**
      * Method hexStringToByteArray turns a String of hex characters into bytes
      *
      * @param s A String of hex characters
      * @return A byte array that represents the string of hex characters
-     */
+     
     public byte[] hexStringToByteArray(String s) {
         int len = s.length();
         byte[] data = new byte[len / 2];
@@ -530,6 +534,7 @@ public class CloudCoin
         }
         return data;
     }//End of hexString to byte array
+*/
 
     /**
      * Method gradeStatus does two things: 
@@ -645,7 +650,7 @@ public class CloudCoin
         this.gradeStatus[2] = otherDesc;
         return  gradeStatus;
     }//end gradeStatus
-
+/*
     public boolean writeTo( String folder){
         boolean goodSave = false;
         this.setJSON();
@@ -673,7 +678,7 @@ public class CloudCoin
         }
         return goodSave;
     } 
-    
+    */
     
     /**
      * Method setAnsToPans
@@ -688,12 +693,13 @@ public class CloudCoin
 
     }//end setAnsToPans
 
+    /*
     /**
      * Method fileToString turns a file into String
      *
      * @param pathname A file
      * @return The file contents in a String
-     */
+    
     public String fileToString(String pathname) throws IOException {
         File file = new File(pathname);
         StringBuilder fileContents = new StringBuilder((int)file.length());
@@ -710,6 +716,7 @@ public class CloudCoin
         }
         return fileContents.toString();
     }
+ */
 
     /**
      * Method setAnsToPansIfPassed looks at the past Status to see if the detections passed. If so the AN becomes the PAN.
@@ -758,7 +765,7 @@ public class CloudCoin
         }//End for each cloud coin GUID statu
         System.out.println("");
     }//end consoleReport
-
+/*
     private void parseJpeg( String wholeString){
         int startAn = 40;
         int endAn = 72;
@@ -812,5 +819,5 @@ public class CloudCoin
         }
         return arr;
     }//end toStringArray
-    
+    */
 }//End of class CloudCoin

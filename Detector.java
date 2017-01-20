@@ -30,7 +30,7 @@ public class Detector
         for(int j = 0; j < suspectFileNames.length; j++){
             try{
                 //System.out.println("Construct Coin: "+rootFolder + suspectFileNames[j]);
-                newCC = new CloudCoin( fileUtils.suspectFolder + suspectFileNames[j]);
+                newCC = fileUtils.cloudCoinFromFile( fileUtils.suspectFolder + suspectFileNames[j]);
                 System.out.println("" );
                 System.out.println("" );
                 System.out.println("Detecting SN #"+ newCC.sn +", Denomination: "+ newCC.getDenomination() );
@@ -39,9 +39,9 @@ public class Detector
                 //detectedCC.saveCoin( detectedCC.extension );//save coin as bank
                 detectedCC.consoleReport();
                 switch( detectedCC.extension ){
-                    case "bank": totalValueToBank++; detectedCC.writeTo( fileUtils.bankFolder ); break;
-                    case "fractured": totalValueToFractured++; detectedCC.writeTo( fileUtils.frackedFolder ); break;//fracked still ads value to the bank
-                    case "counterfeit": totalValueToCounterfeit++; detectedCC.writeTo( fileUtils.counterfeitFolder ); break;
+                    case "bank": totalValueToBank++; fileUtils.writeTo( fileUtils.bankFolder, detectedCC ); break;
+                    case "fractured": totalValueToFractured++; fileUtils.writeTo( fileUtils.frackedFolder, detectedCC ); break;//fracked still ads value to the bank
+                    case "counterfeit": totalValueToCounterfeit++; fileUtils.writeTo( fileUtils.counterfeitFolder, detectedCC ); break;
                 }//end switch on the place the coin will go 
                 fileUtils.deleteCoin( fileUtils.suspectFolder + suspectFileNames[j] );
             }catch(FileNotFoundException ex){
