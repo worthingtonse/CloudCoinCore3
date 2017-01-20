@@ -52,7 +52,6 @@ public class Exporter
         for(int i =0; i< bankedFileNames.length; i++ ){
             String bankFileName = fileUtils.bankFolder + bankedFileNames[i];
             String frackedFileName = fileUtils.frackedFolder + bankedFileNames[i];
-            System.out.println("Reading from "+ bankFileName);
             String denomination = bankedFileNames[i].split("\\.")[0];//Get's denominiation
             try{
                 if( denomination.equals("1") && m1 > 0 ){ 
